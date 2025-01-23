@@ -1,4 +1,6 @@
+const fs = require('fs');
 const path = require('path');
+const { createConfigFile } = require('./config/configCreator');
 const { loadConfig } = require('./config/configLoader');
 const { getToken } = require('./auth/auth');
 const { clearFile } = require('./file/fileUtils');
@@ -7,9 +9,15 @@ const { getShadows } = require('./handler/shadowHandler');
 const { getDefaultColorTemplatePath, getDefaultShadowTemplatePath } = require('./config/defaultTemplate');
 
 async function main() {
+    const configPath = path.join(__dirname, 'config/config.json');
+
+    if (!fs.existsSync(configPath)) {
+        console.log("The config file.json was not found. Starting the setup...");
+        await createConfigFile();
+    }
+
     let configs;
     try {
-        const configPath = path.join(__dirname, 'config.json');
         configs = await loadConfig(configPath);
     } catch (err) {
         console.error('Error reading or parsing the configuration file:', err);
