@@ -14,7 +14,7 @@ async function askQuestion(query) {
 async function createConfigFile() {
     console.log("Setting up configuration for file generation...");
 
-    const platform = await askQuestion("Enter platform (e.g., WEB, MOBILE): ");
+    const platform = await askQuestion("Enter platform (e.g., WEB, ANDROID): ");
     const outputFilePath = await askQuestion("Enter the output file path: ");
     const items = [];
 

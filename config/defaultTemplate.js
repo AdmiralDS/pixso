@@ -4,6 +4,8 @@ function getDefaultColorTemplatePath(dirname, platform) {
     switch (platform) {
         case "WEB":
             return path.join(dirname, "templates/web/color.liquid");
+        case "ANDROID":
+            return path.join(dirname, "templates/android/color.liquid");
         default:
             return path.join(dirname, "templates/web/color.liquid");
     }
