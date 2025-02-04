@@ -16,6 +16,15 @@ function parseRules(nameTransformRules) {
         });
     }
 
+    if (nameTransformRules.camelCase == true) {
+        funcs.push((input) => {
+            return input
+                .toLowerCase()
+                .replace(/_([a-zA-Z0-9])/g, (match, letter) => letter.toUpperCase())
+                .replace(/^([A-Z])/, (match) => match.toLowerCase());
+        });
+    }
+
     return funcs;
 }
 

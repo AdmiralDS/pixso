@@ -14,7 +14,7 @@ async function askQuestion(query) {
 async function createConfigFile() {
     console.log("Setting up configuration for file generation...");
 
-    const platform = await askQuestion("Enter platform (e.g., WEB, MOBILE): ");
+    const platform = await askQuestion("Enter platform (e.g., WEB, IOS): ");
     const outputFilePath = await askQuestion("Enter the output file path: ");
     const items = [];
 
@@ -30,6 +30,7 @@ async function createConfigFile() {
         
         const removePercent = await askQuestion("Remove percentage from names? (true/false): ");
         const keepOnlyFirstUnderscore = await askQuestion("Keep only the first underscore? (true/false): ");
+        const camelCase = await askQuestion("Use camelCase? (true/false): ");
         const sort = await askQuestion("Sort items? (true/false): ");
 
         items.push({
@@ -41,6 +42,7 @@ async function createConfigFile() {
             transformRules: {
                 removePercent: removePercent === "true",
                 keepOnlyFirstUnderscore: keepOnlyFirstUnderscore === "true",
+                camelCase: camelCase === "true",
                 sort: sort === "true"
             }
         });
