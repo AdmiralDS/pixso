@@ -14,8 +14,8 @@ async function askQuestion(query) {
 async function createConfigFile() {
     console.log("Setting up configuration for file generation...");
 
-    const platform = await askQuestion("Enter platform (e.g., WEB, IOS): ");
-    const outputFilePath = await askQuestion("Enter the output file path: ");
+    const platform = await askQuestion("Enter platform (e.g., WEB, MOBILE, IOS): ");
+    const outputFilePath = await askQuestion("Enter the output file path with file extention, like color.dark.ts or color.dark.swift: ");
     const items = [];
 
     let addMoreItems = true;
@@ -29,9 +29,38 @@ async function createConfigFile() {
         const templatePath = await askQuestion("Enter template path (leave empty if not needed): ");
         
         const removePercent = await askQuestion("Remove percentage from names? (true/false): ");
-        const keepOnlyFirstUnderscore = await askQuestion("Keep only the first underscore? (true/false): ");
-        const camelCase = await askQuestion("Use camelCase? (true/false): ");
         const sort = await askQuestion("Sort items? (true/false): ");
+
+        console.log("\nChoose a naming convention:");
+        console.log("1 - camelCase");
+        console.log("2 - PascalCase");
+        console.log("3 - snake_case");
+        console.log("4 - kebab-case");
+        console.log("5 - flatcase");
+
+        let namingConvention;
+        while (!namingConvention) {
+            const namingChoice = await askQuestion("Enter your choice (1-4): ");
+            switch (namingChoice) {
+                case "1":
+                    namingConvention = "camelCase";
+                    break;
+                case "2":
+                    namingConvention = "PascalCase";
+                    break;
+                case "3":
+                    namingConvention = "snake_case";
+                    break;
+                case "4":
+                    namingConvention = "kebab-case";
+                    break;
+                case "5":
+                    namingConvention = "flatcase";
+                    break;
+                default:
+                    console.log("Invalid choice, please select a valid option (1-5).");
+            }
+        }
 
         items.push({
             type,
@@ -41,9 +70,8 @@ async function createConfigFile() {
             ...(templatePath ? { templatePath } : {}),
             transformRules: {
                 removePercent: removePercent === "true",
-                keepOnlyFirstUnderscore: keepOnlyFirstUnderscore === "true",
-                camelCase: camelCase === "true",
-                sort: sort === "true"
+                sort: sort === "true",
+                namingConvention
             }
         });
 
