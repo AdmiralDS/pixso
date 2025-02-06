@@ -1,0 +1,4 @@
+@SuppressLint("LongLine")
+open class {{ name }} { {% for color in colors %}
+    val {{ color.name | underscoreToCamelCase }} = Color("{{ color.value }}"){% endfor %}
+}
