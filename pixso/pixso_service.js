@@ -108,8 +108,6 @@ async function getMapShadows(apiBase, fileKey, token) {
       });
     }
 
-    shadowValues.reverse();
-
     shadows.push({
       name: style.name,
       values: shadowValues
