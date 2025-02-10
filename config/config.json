@@ -1,0 +1,58 @@
+[
+  {
+    "platform": "WEB",
+    "outputFilePath": "/Users/andyatkov/web/lib/components/theme/values/color.light.ts",
+    "items": [
+      {
+        "type": "COLOR",
+        "name": "color",
+        "apiBaseUrl": "https://pixso.t1-pixso.ru",
+        "fileKey": "uSjNAVkKdwGPfIy3S72-cA",
+        "transformRules": {
+          "removePercent": true,
+          "keepOnlyFirstUnderscore": true,
+          "sort": true
+        }
+      },
+      {
+        "type": "SHADOW",
+        "name": "boxShadow",
+        "apiBaseUrl": "https://pixso.t1-pixso.ru",
+        "fileKey": "uSjNAVkKdwGPfIy3S72-cA",
+        "transformRules": {
+          "removePercent": true,
+          "keepOnlyFirstUnderscore": true,
+          "sort": true
+        }
+      }
+    ]
+  },
+  {
+    "platform": "WEB",
+    "outputFilePath": "/Users/andyatkov/web/lib/components/theme/values/color.dark.ts",
+    "items": [
+      {
+        "type": "COLOR",
+        "name": "color",
+        "apiBaseUrl": "https://pixso.t1-pixso.ru",
+        "fileKey": "iz8Z0ubn2rLfpEcJQD__tg",
+        "transformRules": {
+          "removePercent": true,
+          "keepOnlyFirstUnderscore": true,
+          "sort": true
+        }
+      },
+      {
+        "type": "SHADOW",
+        "name": "boxShadow",
+        "apiBaseUrl": "https://pixso.t1-pixso.ru",
+        "fileKey": "iz8Z0ubn2rLfpEcJQD__tg",
+        "transformRules": {
+          "removePercent": true,
+          "keepOnlyFirstUnderscore": true,
+          "sort": true
+        }
+      }
+    ]
+  }
+]
