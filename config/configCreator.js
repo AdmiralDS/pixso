@@ -14,7 +14,36 @@ async function askQuestion(query) {
 async function createConfigFile() {
     console.log("Setting up configuration for file generation...");
 
-    const platform = await askQuestion("Enter platform (e.g., WEB, MOBILE, IOS, ANDROID): ");
+    console.log("\nChoose platform:");
+    console.log("1 - WEB");
+    console.log("2 - MOBILE");
+    console.log("3 - IOS");
+    console.log("4 - ANDROID");
+    console.log("5 - FLUTTER");
+
+    let platform;
+    while (!platform) {
+        const namingChoice = await askQuestion("Enter your choice (1-5): ");
+        switch (namingChoice) {
+            case "1":
+                platform = "WEB";
+                break;
+            case "2":
+                platform = "MOBILE";
+                break;
+            case "3":
+                platform = "IOS";
+                break;
+            case "4":
+                platform = "ANDROID";
+                break;
+            case "5":
+                platform = "FLUTTER";
+                break;
+            default:
+                console.log("Invalid choice, please select a valid option (1-5).");
+        }
+    }
     const outputFilePath = await askQuestion("Enter the output file path with file extention, like color.dark.ts or color.dark.swift: ");
     const items = [];
 
@@ -40,7 +69,7 @@ async function createConfigFile() {
 
         let namingConvention;
         while (!namingConvention) {
-            const namingChoice = await askQuestion("Enter your choice (1-4): ");
+            const namingChoice = await askQuestion("Enter your choice (1-5): ");
             switch (namingChoice) {
                 case "1":
                     namingConvention = "camelCase";
