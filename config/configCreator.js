@@ -14,38 +14,42 @@ async function askQuestion(query) {
 async function createConfigFile() {
     console.log("Setting up configuration for file generation...");
 
-    console.log("\nChoose platform:");
-    console.log("1 - WEB");
-    console.log("2 - MOBILE");
-    console.log("3 - IOS");
-    console.log("4 - ANDROID");
-    console.log("5 - FLUTTER");
+    const themes = [];
+    let addMoreTheme = true;
+    while (addMoreTheme) {
 
-    let platform;
-    while (!platform) {
-        const namingChoice = await askQuestion("Enter your choice (1-5): ");
-        switch (namingChoice) {
-            case "1":
-                platform = "WEB";
-                break;
-            case "2":
-                platform = "MOBILE";
-                break;
-            case "3":
-                platform = "IOS";
-                break;
-            case "4":
-                platform = "ANDROID";
-                break;
-            case "5":
-                platform = "FLUTTER";
-                break;
-            default:
-                console.log("Invalid choice, please select a valid option (1-5).");
+        console.log("\nChoose platform:");
+        console.log("1 - WEB");
+        console.log("2 - MOBILE");
+        console.log("3 - IOS");
+        console.log("4 - ANDROID");
+        console.log("5 - FLUTTER");
+    
+        let platform;
+        while (!platform) {
+            const namingChoice = await askQuestion("Enter your choice (1-5): ");
+            switch (namingChoice) {
+                case "1":
+                    platform = "WEB";
+                    break;
+                case "2":
+                    platform = "MOBILE";
+                    break;
+                case "3":
+                    platform = "IOS";
+                    break;
+                case "4":
+                    platform = "ANDROID";
+                    break;
+                case "5":
+                    platform = "FLUTTER";
+                    break;
+                default:
+                    console.log("Invalid choice, please select a valid option (1-5).");
+            }
         }
-    }
-    const outputFilePath = await askQuestion("Enter the output file path with file extention, like color.dark.ts or color.dark.swift: ");
-    const items = [];
+        const outputFilePath = await askQuestion("Enter the output file path with file extention, like color.dark.ts or color.dark.swift: ");
+        const items = [];
 
         let addMoreItems = true;
         while (addMoreItems) {
@@ -60,27 +64,35 @@ async function createConfigFile() {
             const removePercent = await askQuestion("Remove percentage from names? (true/false): ");
             const sort = await askQuestion("Sort items? (true/false): ");
 
-        let namingConvention;
-        while (!namingConvention) {
-            const namingChoice = await askQuestion("Enter your choice (1-5): ");
-            switch (namingChoice) {
-                case "1":
-                    namingConvention = "camelCase";
-                    break;
-                case "2":
-                    namingConvention = "PascalCase";
-                    break;
-                case "3":
-                    namingConvention = "snake_case";
-                    break;
-                case "4":
-                    namingConvention = "kebab-case";
-                    break;
-                case "5":
-                    namingConvention = "flatcase";
-                    break;
-                default:
-                    console.log("Invalid choice, please select a valid option (1-5).");
+            console.log("\nChoose a naming convention:");
+            console.log("1 - camelCase");
+            console.log("2 - PascalCase");
+            console.log("3 - snake_case");
+            console.log("4 - kebab-case");
+            console.log("5 - flatcase");
+
+            let namingConvention;
+            while (!namingConvention) {
+                const namingChoice = await askQuestion("Enter your choice (1-4): ");
+                switch (namingChoice) {
+                    case "1":
+                        namingConvention = "camelCase";
+                        break;
+                    case "2":
+                        namingConvention = "PascalCase";
+                        break;
+                    case "3":
+                        namingConvention = "snake_case";
+                        break;
+                    case "4":
+                        namingConvention = "kebab-case";
+                        break;
+                    case "5":
+                        namingConvention = "flatcase";
+                        break;
+                    default:
+                        console.log("Invalid choice, please select a valid option (1-5).");
+                }
             }
 
             items.push({
