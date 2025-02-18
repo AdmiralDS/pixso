@@ -8,6 +8,8 @@ function getDefaultColorTemplatePath(dirname, platform) {
             return path.join(dirname, "templates/ios/color.liquid");
         case "ANDROID":
             return path.join(dirname, "templates/android/color.liquid");
+        case "FLUTTER":
+            return path.join(dirname, "templates/flutter/color.liquid");
         default:
             return path.join(dirname, "templates/web/color.liquid");
     }
