@@ -62,18 +62,21 @@ async function createConfigFile() {
             const templatePath = await askQuestion("Enter template path (leave empty if not needed): ");
 
             const removePercent = await askQuestion("Remove percentage from names? (true/false): ");
+            const keepOnlyFirstUnderscore = await askQuestion("Keep only the first underscore? (true/false): ");
             const sort = await askQuestion("Sort items? (true/false): ");
 
             console.log("\nChoose a naming convention:");
             console.log("1 - camelCase");
             console.log("2 - PascalCase");
             console.log("3 - snake_case");
-            console.log("4 - kebab-case");
-            console.log("5 - flatcase");
+            console.log("4 - SCREAMING_SNAKE_CASE");
+            console.log("5 - kebab-case");
+            console.log("6 - flatcase");
+            console.log("7 - none");
 
             let namingConvention;
             while (!namingConvention) {
-                const namingChoice = await askQuestion("Enter your choice (1-4): ");
+                const namingChoice = await askQuestion("Enter your choice (1-7): ");
                 switch (namingChoice) {
                     case "1":
                         namingConvention = "camelCase";
@@ -85,13 +88,19 @@ async function createConfigFile() {
                         namingConvention = "snake_case";
                         break;
                     case "4":
-                        namingConvention = "kebab-case";
+                        namingConvention = "SCREAMING_SNAKE_CASE";
                         break;
                     case "5":
+                        namingConvention = "kebab-case";
+                        break;
+                    case "6":
                         namingConvention = "flatcase";
                         break;
+                    case "7":
+                        namingConvention = "none";
+                        break;
                     default:
-                        console.log("Invalid choice, please select a valid option (1-5).");
+                        console.log("Invalid choice, please select a valid option (1-7).");
                 }
             }
 
@@ -103,6 +112,7 @@ async function createConfigFile() {
                 ...(templatePath ? { templatePath } : {}),
                 transformRules: {
                     removePercent: removePercent.toLowerCase() === "true",
+                    keepOnlyFirstUnderscore: keepOnlyFirstUnderscore === "true",
                     sort: sort.toLowerCase() === "true",
                     namingConvention
                 }

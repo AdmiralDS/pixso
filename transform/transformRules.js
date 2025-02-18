@@ -5,6 +5,22 @@ function parseRules(nameTransformRules) {
         funcs.push((input) => input.replace(/%/g, ''));
     }
 
+    if (nameTransformRules.keepOnlyFirstUnderscore == true) {
+            funcs.push((input) => {
+                input = input.replace('/', ' ');
+                const firstSpaceIndex = input.indexOf(' ');
+                if (firstSpaceIndex !== -1) {
+                    input = input.slice(0, firstSpaceIndex) + '_' + input.slice(firstSpaceIndex + 1);
+                let words = input
+                    .replace(/[^a-zA-Z0-9]+/g, ' ')
+                    .trim()
+                    .split(/\s+/);
+
+                return input.replace(/\s/g, '');
+                }
+            });
+        }
+
     if (nameTransformRules.namingConvention) {
         funcs.push((input) => {
             let words = input
@@ -27,13 +43,14 @@ function parseRules(nameTransformRules) {
                         .join('');
                 case 'snake_case':
                     return words.map(word => word.toLowerCase()).join('_');
-
+                case 'SCREAMING_SNAKE_CASE':
+                        return words.map(word => word.toUpperCase()).join('_');
                 case 'kebab-case':
                     return words.map(word => word.toLowerCase()).join('-');
-
                 case 'flatcase':
                     return words.map(word => word.toLowerCase()).join('');
-
+                case 'none':
+                    return input;
                 default:
                     return input;
             }
