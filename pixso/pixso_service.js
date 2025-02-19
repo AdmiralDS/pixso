@@ -38,6 +38,19 @@ function formatAlpha(alpha) {
   return Number.isInteger(alphaValue) ? `${alphaValue}` : alphaValue.toFixed(2);
 }
 
+function toHexColor(color) {
+  const r = Math.round(color.r);
+  const g = Math.round(color.g);
+  const b = Math.round(color.b);
+  
+  let colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+  if (color.a !== undefined && color.a < 1) {
+      const a = `${Math.round(color.a * 255).toString(16).padStart(2, "0").toUpperCase()}`;
+      return `${colorString}${a}`;
+  }
+  return colorString;
+}
+
 async function getMapColors(apiBase, fileKey, token) {
   if (!fileKey) {
     throw new Error('fileKey cannot be empty');
@@ -57,13 +70,9 @@ async function getMapColors(apiBase, fileKey, token) {
     if (style.meta.style_thumbnail.fillPaints.length === 0) continue;
 
     const color = style.meta.style_thumbnail.fillPaints[0].color;
-    const r = Math.round(color.r);
-    const g = Math.round(color.g);
-    const b = Math.round(color.b);
-    let colorValue = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
     result.push({
       name: style.name,
-      value: colorValue,
+      value: toHexColor(color),
     });
   }
 
