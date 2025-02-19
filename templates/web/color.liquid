@@ -1,0 +1,4 @@
+export const {{ name }} = { {% for color in colors %}
+  {{ color.name }}: '{{ color.value }}',{% endfor %}
+} as const;
+

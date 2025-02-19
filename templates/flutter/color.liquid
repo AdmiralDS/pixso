@@ -1,0 +1,12 @@
+//
+//  Created by Generated Script.
+//
+
+import 'package:flutter/material.dart';
+
+// ignore_for_file: type=lint
+class {{ name }} {
+  {% for color in colors %}
+  static const Color {{ color.name | camelcase }} = Color(0xFF{{ color.value | remove: "#" | upcase }});
+  {% endfor %}
+}
