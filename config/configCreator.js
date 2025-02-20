@@ -2,141 +2,104 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-async function askQuestion(query) {
-    return new Promise(resolve => rl.question(query, answer => resolve(answer.trim())));
-}
+const askQuestion = query => new Promise(resolve => rl.question(query, answer => resolve(answer.trim())));
+
+const platformChoices = ["WEB", "MOBILE", "IOS", "ANDROID", "FLUTTER"];
+const namingConventions = ["camelCase", "PascalCase", "snake_case", "SCREAMING_SNAKE_CASE", "kebab-case", "flatcase", "none"];
 
 async function createConfigFile() {
     console.log("Setting up configuration for file generation...");
-
     const themes = [];
-    let addMoreTheme = true;
-    while (addMoreTheme) {
-
-        console.log("\nChoose platform:");
-        console.log("1 - WEB");
-        console.log("2 - MOBILE");
-        console.log("3 - IOS");
-        console.log("4 - ANDROID");
-        console.log("5 - FLUTTER");
     
-        let platform;
-        while (!platform) {
-            const namingChoice = await askQuestion("Enter your choice (1-5): ");
-            switch (namingChoice) {
-                case "1":
-                    platform = "WEB";
-                    break;
-                case "2":
-                    platform = "MOBILE";
-                    break;
-                case "3":
-                    platform = "IOS";
-                    break;
-                case "4":
-                    platform = "ANDROID";
-                    break;
-                case "5":
-                    platform = "FLUTTER";
-                    break;
-                default:
-                    console.log("Invalid choice, please select a valid option (1-5).");
-            }
-        }
-        const outputFilePath = await askQuestion("Enter the output file path with file extention, like color.dark.ts or color.dark.swift: ");
+    while (true) {
+        console.log("\nChoose platform:");
+        const platform = await selectOption("", platformChoices);
+        const outputFilePath = await getValidFilePath();
         const items = [];
-
-        let addMoreItems = true;
-        while (addMoreItems) {
-            console.log("\nAdding a new item...");
-
-            const type = await askQuestion("Enter item type (COLOR or SHADOW): ");
-            const name = await askQuestion("Enter name (e.g., color or boxShadow): ");
-            const apiBaseUrl = await askQuestion("Enter API URL (e.g., https://pixso.t1-pixso.ru): ");
-            const fileKey = await askQuestion("Enter fileKey: ");
-            const templatePath = await askQuestion("Enter template path (leave empty if not needed): ");
-
-            const removePercent = await askQuestion("Remove percentage from names? (true/false): ");
-            const keepOnlyFirstUnderscore = await askQuestion("Keep only the first underscore? (true/false): ");
-            const sort = await askQuestion("Sort items? (true/false): ");
-
-            console.log("\nChoose a naming convention:");
-            console.log("1 - camelCase");
-            console.log("2 - PascalCase");
-            console.log("3 - snake_case");
-            console.log("4 - SCREAMING_SNAKE_CASE");
-            console.log("5 - kebab-case");
-            console.log("6 - flatcase");
-            console.log("7 - none");
-
-            let namingConvention;
-            while (!namingConvention) {
-                const namingChoice = await askQuestion("Enter your choice (1-7): ");
-                switch (namingChoice) {
-                    case "1":
-                        namingConvention = "camelCase";
-                        break;
-                    case "2":
-                        namingConvention = "PascalCase";
-                        break;
-                    case "3":
-                        namingConvention = "snake_case";
-                        break;
-                    case "4":
-                        namingConvention = "SCREAMING_SNAKE_CASE";
-                        break;
-                    case "5":
-                        namingConvention = "kebab-case";
-                        break;
-                    case "6":
-                        namingConvention = "flatcase";
-                        break;
-                    case "7":
-                        namingConvention = "none";
-                        break;
-                    default:
-                        console.log("Invalid choice, please select a valid option (1-7).");
-                }
-            }
-
-            items.push({
-                type,
-                name,
-                apiBaseUrl,
-                fileKey,
-                ...(templatePath ? { templatePath } : {}),
-                transformRules: {
-                    removePercent: removePercent.toLowerCase() === "true",
-                    keepOnlyFirstUnderscore: keepOnlyFirstUnderscore === "true",
-                    sort: sort.toLowerCase() === "true",
-                    namingConvention
-                }
-            });
-
-            const addAnother = await askQuestion("Add another item? (yes/no): ");
-            addMoreItems = addAnother.toLowerCase() === "yes";
+        
+        while (true) {
+            const lastThemeItem = themes.length > 0 ? themes[themes.length - 1].items.slice(-1)[0] : null;
+            const lastItem = items.length > 0 ? items[items.length - 1] : null;
+            items.push(await getItemDetails(lastThemeItem, lastItem));
+            if (!(await getBooleanInput("Add another item?"))) break;
         }
-
-        themes.push({
-            platform,
-            outputFilePath,
-            items
-        });
-
-        const addAnotherTheme = await askQuestion("Add another theme? (yes/no): ");
-        addMoreTheme = addAnotherTheme.toLowerCase() === "yes";
+        
+        themes.push({ platform, outputFilePath, items });
+        if (!(await getBooleanInput("Add another theme?"))) break;
     }
-
+    
     const configPath = path.join(__dirname, 'config.json');
     fs.writeFileSync(configPath, JSON.stringify(themes, null, 2), 'utf8');
-
     console.log(`\n✅ Configuration file successfully created: ${configPath}`);
     rl.close();
+}
+
+async function getItemDetails(lastThemeItem, lastItem) {
+    console.log("\nAdding a new item...");
+    const type = await askQuestion("Enter item type (COLOR or SHADOW): ");
+    const name = await askQuestion("Enter name (e.g., color or boxShadow): ");
+    
+    let duplicateItem = lastThemeItem ?? lastItem;
+    if (duplicateItem && await getBooleanInput("Duplicate previous item?")) {
+        console.log("\n✅ Item duplicated with updated type and name.");
+        return { ...duplicateItem, type, name };
+    }
+    
+    return {
+        type,
+        name,
+        apiBaseUrl: await askQuestion("Enter API URL: "),
+        fileKey: await askQuestion("Enter fileKey: "),
+        templatePath: (await askQuestion("Enter template path (leave empty if not needed): ")) || undefined,
+        transformRules: {
+            removePercent: await getBooleanInput("Remove percentage from names?"),
+            keepOnlyFirstUnderscore: await getBooleanInput("Keep only the first underscore?"),
+            sort: await getBooleanInput("Sort items?"),
+            namingConvention: await selectOption("Choose a naming convention:", namingConventions, "none")
+        }
+    };
+}
+
+async function selectOption(prompt, options, defaultValue = null) {
+    console.log(`\n${prompt}`);
+    options.forEach((opt, index) => console.log(`${index + 1} - ${opt}`));
+    while (true) {
+        const choice = await askQuestion("Enter your choice (1-" + options.length + "): ");
+        if (options[choice - 1]) return options[choice - 1];
+        if (defaultValue != null) return defaultValue;
+        console.log("Invalid choice, please select a valid option (1-" + options.length + ").");
+    }
+}
+
+async function getBooleanInput(prompt) {
+    const answer = await askQuestion(`${prompt} (true/false): `);
+    if (answer != "true" && answer != "false") return true;
+    return answer.toLowerCase() === "true";
+}
+
+async function getValidFilePath() {
+    while (true) {
+        const filePath = await askQuestion("Enter the output file path with file extension, like color.dark.ts or color.dark.swift: ");
+        const dirPath = path.dirname(filePath);
+
+        // Проверяем, существует ли файл и доступна ли директория
+        try {
+            // Проверка, существует ли директория
+            await fs.promises.access(dirPath, fs.constants.R_OK | fs.constants.W_OK);
+
+            // Проверка, что путь ведет к файлу, а не директории
+            const stats = await fs.promises.stat(filePath);
+            if (stats.isFile()) {
+                return filePath;
+            } else {
+                console.log("The specified path is not a file. Please enter a valid file path.");
+            }
+        } catch (err) {
+            console.log("Invalid path or directory is not accessible. Please enter a valid file path.");
+        }
+    }
 }
 
 module.exports = { createConfigFile };
