@@ -30,20 +30,14 @@
 ]
 ```
 
-## Установка
-
-```sh
-npm install
-```
-
-```sh
-npm install -g .
-```
-
 ## Использование
 
 ```sh
-pixso-cli run
+npx @admiral-ds/pixso-cli@latest run
+```
+или
+```sh
+npx @admiral-ds/pixso-cli@latest json
 ```
 
 После запуска скрипта начнётся диалог с пользователем для настройки параметров выгрузки.
