@@ -1,39 +1,30 @@
 {
-  "name": "@admiral-ds/pixso-cli",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "files": [
-    "README.md",
-    "main.js"
-  ],
-  "keywords": [
-    "AdmiralDS",
-    "Admiral",
-    "pixso",
-    "cli",
-    "token"
-  ],
-  "author": "Admiral DS team",
-  "license": "See license in ./LICENSE",
-  "description": "Pixso Tokens Extractor",
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "liquidjs": "^10.20.1",
-    "node-fetch": "^2.7.0",
-    "punycode": "^2.3.1",
-    "yargs": "^17.7.2"
-  },
-  "bin": {
-    "pixso-cli": "./main.js"
-  },
-  "repository": "https://github.com/AdmiralDS/pixso",
-  "bugs": {
-    "url": "https://github.com/AdmiralDS/pixso/issues"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@admiral-ds/pixso-cli",
+	"version": "1.0.1",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"files": ["README.md", "src", "main.js"],
+	"keywords": ["AdmiralDS", "Admiral", "pixso", "cli", "token"],
+	"author": "Admiral DS team",
+	"license": "See license in ./LICENSE",
+	"description": "Pixso Tokens Extractor",
+	"dependencies": {
+		"dotenv": "^16.4.7",
+		"liquidjs": "^10.20.1",
+		"node-fetch": "^2.7.0",
+		"punycode": "^2.3.1",
+		"yargs": "^17.7.2"
+	},
+	"bin": {
+		"pixso-cli": "./main.js"
+	},
+	"repository": "https://github.com/AdmiralDS/pixso",
+	"bugs": {
+		"url": "https://github.com/AdmiralDS/pixso/issues"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
