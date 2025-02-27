@@ -1,0 +1,34 @@
+{
+  "prettier.enable": false,
+  "biome.enabled": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "search.useIgnoreFiles": true,
+  "search.exclude": {
+    "**/.git": true,
+    "**/dist": true,
+    "**/dist-types": true,
+    "**/coverage": true,
+    "**/compiled": true,
+    "**/doc_build": true,
+    "**/node_modules": true,
+    "**/tsconfig.tsbuildinfo": true
+  },
+  "files.exclude": {
+    "**/.DS_Store": true
+  },
+  "mdx.validate.validateFileLinks": "ignore"
+}
