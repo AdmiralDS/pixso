@@ -1,4 +1,4 @@
-const https = require('https');
+const https = require("node:https");
 
 function fetchJSON(url, token) {
   return new Promise((resolve, reject) => {
@@ -8,24 +8,28 @@ function fetchJSON(url, token) {
       },
     };
 
-    https.get(url, options, (res) => {
-      let data = '';
-      res.on('data', (chunk) => {
-        data += chunk;
+    https
+      .get(url, options, (res) => {
+        let data = "";
+        res.on("data", (chunk) => {
+          data += chunk;
+        });
+        res.on("end", () => {
+          if (res.statusCode !== 200) {
+            return reject(
+              new Error(`Request failed with status: ${res.statusCode}`)
+            );
+          }
+          try {
+            resolve(JSON.parse(data));
+          } catch (err) {
+            reject(new Error(`Failed to parse JSON: ${err.message}`));
+          }
+        });
+      })
+      .on("error", (err) => {
+        reject(new Error(`HTTP request error: ${err.message}`));
       });
-      res.on('end', () => {
-        if (res.statusCode !== 200) {
-          return reject(new Error(`Request failed with status: ${res.statusCode}`));
-        }
-        try {
-          resolve(JSON.parse(data));
-        } catch (err) {
-          reject(new Error(`Failed to parse JSON: ${err.message}`));
-        }
-      });
-    }).on('error', (err) => {
-      reject(new Error(`HTTP request error: ${err.message}`));
-    });
   });
 }
 
@@ -42,18 +46,24 @@ function toHexColor(color) {
   const r = Math.round(color.r);
   const g = Math.round(color.g);
   const b = Math.round(color.b);
-  
-  let colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+
+  let colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b)
+    .toString(16)
+    .slice(1)
+    .toUpperCase()}`;
   if (color.a !== undefined && color.a < 1) {
-      const a = `${Math.round(color.a * 255).toString(16).padStart(2, "0").toUpperCase()}`;
-      return `${colorString}${a}`;
+    const a = `${Math.round(color.a * 255)
+      .toString(16)
+      .padStart(2, "0")
+      .toUpperCase()}`;
+    return `${colorString}${a}`;
   }
   return colorString;
 }
 
 async function getMapColors(apiBase, fileKey, token) {
   if (!fileKey) {
-    throw new Error('fileKey cannot be empty');
+    throw new Error("fileKey cannot be empty");
   }
 
   const apiUrl = `${apiBase}/openapi/v1/file/library?file_key=${fileKey}`;
@@ -65,7 +75,12 @@ async function getMapColors(apiBase, fileKey, token) {
   for (const styleId in styles) {
     const style = styles[styleId];
 
-    if (!style.meta || !style.meta.style_thumbnail || !style.meta.style_thumbnail.fillPaints) continue;
+    if (
+      !style.meta ||
+      !style.meta.style_thumbnail ||
+      !style.meta.style_thumbnail.fillPaints
+    )
+      continue;
 
     if (style.meta.style_thumbnail.fillPaints.length === 0) continue;
 
@@ -81,7 +96,7 @@ async function getMapColors(apiBase, fileKey, token) {
 
 async function getMapShadows(apiBase, fileKey, token) {
   if (!fileKey) {
-    throw new Error('fileKey cannot be empty');
+    throw new Error("fileKey cannot be empty");
   }
 
   const apiUrl = `${apiBase}/openapi/v1/file/library?file_key=${fileKey}`;
@@ -93,7 +108,12 @@ async function getMapShadows(apiBase, fileKey, token) {
   for (const styleId in styles) {
     const style = styles[styleId];
 
-    if (!style.meta || !style.meta.style_thumbnail || !style.meta.style_thumbnail.effects) continue;
+    if (
+      !style.meta ||
+      !style.meta.style_thumbnail ||
+      !style.meta.style_thumbnail.effects
+    )
+      continue;
 
     if (style.meta.style_thumbnail.effects.length === 0) continue;
 
@@ -102,7 +122,7 @@ async function getMapShadows(apiBase, fileKey, token) {
     for (const effect of style.meta.style_thumbnail.effects) {
       const { x, y } = effect.offset;
       const { radius, spread, color } = effect;
-      const isShowInset = x < 0 || y < 0 ? 'true' : '';
+      const isShowInset = x < 0 || y < 0 ? "true" : "";
 
       shadowValues.push({
         x: formatValue(x),
@@ -119,7 +139,7 @@ async function getMapShadows(apiBase, fileKey, token) {
 
     shadows.push({
       name: style.name,
-      values: shadowValues
+      values: shadowValues,
     });
   }
 
