@@ -1,10 +1,10 @@
-const { Liquid } = require("liquidjs");
-const fs = require("node:fs");
+import { Liquid } from "liquidjs";
+import { readFileSync } from "node:fs";
 
 async function renderTemplate(templatePath, context) {
   const engine = new Liquid();
-  const template = fs.readFileSync(templatePath, "utf8");
+  const template = readFileSync(templatePath, "utf8");
   return engine.parseAndRender(template, context);
 }
 
-module.exports = { renderTemplate };
+export default { renderTemplate };

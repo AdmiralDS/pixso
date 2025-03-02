@@ -1,4 +1,4 @@
-const https = require("node:https");
+import { get } from "node:https";
 
 function fetchJSON(url, token) {
   return new Promise((resolve, reject) => {
@@ -8,8 +8,7 @@ function fetchJSON(url, token) {
       },
     };
 
-    https
-      .get(url, options, (res) => {
+    get(url, options, (res) => {
         let data = "";
         res.on("data", (chunk) => {
           data += chunk;
@@ -146,4 +145,4 @@ async function getMapShadows(apiBase, fileKey, token) {
   return shadows;
 }
 
-module.exports = { getMapColors, getMapShadows };
+export default { getMapColors, getMapShadows };
