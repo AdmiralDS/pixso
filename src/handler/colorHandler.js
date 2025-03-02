@@ -1,7 +1,7 @@
-const { getMapColors } = require("../pixso/pixso_service");
-const { renderTemplate } = require("./templateHandler");
-const { appendToFile } = require("../file/fileUtils");
-const { parseRules } = require("../transform/transformRules");
+import { getMapColors } from "../pixso/pixso_service";
+import { renderTemplate } from "./templateHandler";
+import { appendToFile } from "../file/fileUtils";
+import { parseRules } from "../transform/transformRules";
 
 async function getColors(
   baseURL,
@@ -10,7 +10,7 @@ async function getColors(
   token,
   templatePath,
   outputFilePath,
-  transformRules
+  transformRules,
 ) {
   try {
     const colors = await getMapColors(baseURL, fileKey, token);
@@ -76,4 +76,4 @@ async function getJSONColors(
   }
 }
 
-module.exports = { getColors, getJSONColors };
+export default { getColors, getJSONColors };

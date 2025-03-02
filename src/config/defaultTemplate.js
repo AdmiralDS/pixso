@@ -1,27 +1,27 @@
-const path = require("node:path");
+import { join } from "node:path";
 
 function getDefaultColorTemplatePath(dirname, platform) {
   switch (platform) {
     case "WEB":
-      return path.join(dirname, "templates/web/color.liquid");
+      return join(dirname, "templates/web/color.liquid");
     case "IOS":
-      return path.join(dirname, "templates/ios/color.liquid");
+      return join(dirname, "templates/ios/color.liquid");
     case "ANDROID":
-      return path.join(dirname, "templates/android/color.liquid");
+      return join(dirname, "templates/android/color.liquid");
     case "FLUTTER":
-      return path.join(dirname, "templates/flutter/color.liquid");
+      return join(dirname, "templates/flutter/color.liquid");
     default:
-      return path.join(dirname, "templates/web/color.liquid");
+      return join(dirname, "templates/web/color.liquid");
   }
 }
 
 function getDefaultShadowTemplatePath(dirname, platform) {
   switch (platform) {
     case "WEB":
-      return path.join(dirname, "templates/web/shadow.liquid");
+      return join(dirname, "templates/web/shadow.liquid");
     default:
-      return path.join(dirname, "templates/web/shadow.liquid");
+      return join(dirname, "templates/web/shadow.liquid");
   }
 }
 
-module.exports = { getDefaultColorTemplatePath, getDefaultShadowTemplatePath };
+export default { getDefaultColorTemplatePath, getDefaultShadowTemplatePath };

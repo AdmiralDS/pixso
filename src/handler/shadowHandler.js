@@ -1,7 +1,7 @@
-const { getMapShadows } = require("../pixso/pixso_service");
-const { renderTemplate } = require("./templateHandler");
-const { appendToFile } = require("../file/fileUtils");
-const { parseRules } = require("../transform/transformRules");
+import { getMapShadows } from "../pixso/pixso_service";
+import { renderTemplate } from "./templateHandler";
+import { appendToFile } from "../file/fileUtils";
+import { parseRules } from "../transform/transformRules";
 
 async function getShadows(
   baseURL,
@@ -10,7 +10,7 @@ async function getShadows(
   token,
   templatePath,
   outputFilePath,
-  transformRules
+  transformRules,
 ) {
   try {
     const shadows = await getMapShadows(baseURL, fileKey, token);
@@ -104,4 +104,4 @@ async function getJSONShadows(
   }
 }
 
-module.exports = { getShadows, getJSONShadows };
+export default { getShadows, getJSONShadows };

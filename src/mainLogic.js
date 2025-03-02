@@ -1,20 +1,24 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { createConfigFile } = require("./config/configCreator");
-const { loadConfig } = require("./config/configLoader");
-const { getToken } = require("./auth/auth");
-const { clearFile } = require("./file/fileUtils");
-const { getColors, getJSONColors } = require("./handler/colorHandler");
-const { getShadows, getJSONShadows } = require("./handler/shadowHandler");
-const {
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { join, path } from "node:path";
+import { createConfigFile } from "./config/configCreator";
+import { loadConfig } from "./config/configLoader";
+import { getToken } from "./auth/auth";
+import { clearFile } from "./file/fileUtils";
+import { getColors, getJSONColors } from "./handler/colorHandler";
+import { getShadows, getJSONShadows } from "./handler/shadowHandler";
+import {
   getDefaultColorTemplatePath,
   getDefaultShadowTemplatePath,
-} = require("./config/defaultTemplate");
+} from "./config/defaultTemplate";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function main() {
-  const configPath = path.join(__dirname, "config/config.json");
+  const configPath = join(__dirname, "config/config.json");
 
-  if (!fs.existsSync(configPath)) {
+  if (!existsSync(configPath)) {
     console.log("The config file.json was not found. Starting the setup...");
     await createConfigFile();
   }
@@ -39,9 +43,9 @@ async function main() {
 }
 
 async function getMainJSON() {
-  const configPath = path.join(__dirname, "config/config.json");
+  const configPath = join(__dirname, "config/config.json");
 
-  if (!fs.existsSync(configPath)) {
+  if (!existsSync(configPath)) {
     console.log("The config file.json was not found. Starting the setup...");
     await createConfigFile();
   }
@@ -159,4 +163,4 @@ async function processItemJSON(item, config) {
   }
 }
 
-module.exports = { main, getMainJSON };
+export default { main, getMainJSON };
