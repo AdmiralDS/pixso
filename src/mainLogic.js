@@ -99,7 +99,7 @@ async function processItem(item, config) {
       token,
       templateColorPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   } else if (type === "SHADOW") {
     await getShadows(
@@ -109,7 +109,7 @@ async function processItem(item, config) {
       token,
       templateShadowPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   }
 }
@@ -146,7 +146,7 @@ async function processItemJSON(item, config) {
       token,
       templateColorPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   }
 
@@ -158,7 +158,7 @@ async function processItemJSON(item, config) {
       token,
       templateShadowPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   }
 }

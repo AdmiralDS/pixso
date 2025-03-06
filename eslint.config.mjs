@@ -35,6 +35,10 @@ export default [
     ),
   ),
   {
+    env: {
+      browser: true,
+      node: true,
+    },
     plugins: {
       "@typescript-eslint": fixupPluginRules(typescriptEslint),
       prettier,

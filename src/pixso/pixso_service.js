@@ -9,26 +9,25 @@ function fetchJSON(url, token) {
     };
 
     get(url, options, (res) => {
-        let data = "";
-        res.on("data", (chunk) => {
-          data += chunk;
-        });
-        res.on("end", () => {
-          if (res.statusCode !== 200) {
-            return reject(
-              new Error(`Request failed with status: ${res.statusCode}`)
-            );
-          }
-          try {
-            resolve(JSON.parse(data));
-          } catch (err) {
-            reject(new Error(`Failed to parse JSON: ${err.message}`));
-          }
-        });
-      })
-      .on("error", (err) => {
-        reject(new Error(`HTTP request error: ${err.message}`));
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
       });
+      res.on("end", () => {
+        if (res.statusCode !== 200) {
+          return reject(
+            new Error(`Request failed with status: ${res.statusCode}`),
+          );
+        }
+        try {
+          resolve(JSON.parse(data));
+        } catch (err) {
+          reject(new Error(`Failed to parse JSON: ${err.message}`));
+        }
+      });
+    }).on("error", (err) => {
+      reject(new Error(`HTTP request error: ${err.message}`));
+    });
   });
 }
 
