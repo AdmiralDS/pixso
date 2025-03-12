@@ -28,4 +28,4 @@ function clearFile(outputFilePath) {
   }
 }
 
-export default { writeToFile, clearFile, appendToFile };
+export { writeToFile, clearFile, appendToFile };

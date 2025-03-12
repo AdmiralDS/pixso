@@ -1,7 +1,12 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { createInterface } from "node:readline";
+import path from "node:path";
 import process from "node:process";
+import { createInterface } from "node:readline";
+import { fileURLToPath } from "node:url";
+
+const __filenameURLToPath = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filenameURLToPath);
 
 const rl = createInterface({
   input: process.stdin,
@@ -151,4 +156,4 @@ async function createConfigFile() {
   rl.close();
 }
 
-export default { createConfigFile };
+export { createConfigFile };

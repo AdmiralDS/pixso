@@ -5,4 +5,4 @@ async function loadConfig(configPath) {
   return JSON.parse(configFile);
 }
 
-export default { loadConfig };
+export { loadConfig };

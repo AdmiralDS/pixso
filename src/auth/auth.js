@@ -1,4 +1,4 @@
-import { getCredentials } from "../credential/credential";
+import { getCredentials } from "../credential/credential.js";
 import { request } from "node:https";
 import { stringify } from "node:querystring";
 import { URL } from "node:url";
@@ -56,4 +56,4 @@ async function getToken(baseURL) {
   });
 }
 
-export default { getToken };
+export { getToken };

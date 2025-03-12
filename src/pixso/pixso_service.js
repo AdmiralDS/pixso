@@ -45,7 +45,7 @@ function toHexColor(color) {
   const g = Math.round(color.g);
   const b = Math.round(color.b);
 
-  let colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b)
+  const colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b)
     .toString(16)
     .slice(1)
     .toUpperCase()}`;
@@ -144,4 +144,4 @@ async function getMapShadows(apiBase, fileKey, token) {
   return shadows;
 }
 
-export default { getMapColors, getMapShadows };
+export { getMapColors, getMapShadows };

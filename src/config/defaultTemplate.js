@@ -24,4 +24,4 @@ function getDefaultShadowTemplatePath(dirname, platform) {
   }
 }
 
-export default { getDefaultColorTemplatePath, getDefaultShadowTemplatePath };
+export { getDefaultColorTemplatePath, getDefaultShadowTemplatePath };

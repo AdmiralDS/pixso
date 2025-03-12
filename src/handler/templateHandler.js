@@ -7,4 +7,4 @@ async function renderTemplate(templatePath, context) {
   return engine.parseAndRender(template, context);
 }
 
-export default { renderTemplate };
+export { renderTemplate };

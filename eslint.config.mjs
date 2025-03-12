@@ -1,12 +1,12 @@
-import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import prettier from "eslint-plugin-prettier";
-import _import from "eslint-plugin-import";
-import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
+import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+import _import from "eslint-plugin-import";
+import prettier from "eslint-plugin-prettier";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,10 +35,6 @@ export default [
     ),
   ),
   {
-    env: {
-      browser: true,
-      node: true,
-    },
     plugins: {
       "@typescript-eslint": fixupPluginRules(typescriptEslint),
       prettier,
@@ -58,7 +54,9 @@ export default [
         typescript: {},
       },
     },
-
+    env: {
+      node: true,
+    },
     rules: {
       "@typescript-eslint/no-explicit-any": 1,
       "no-console": 0,

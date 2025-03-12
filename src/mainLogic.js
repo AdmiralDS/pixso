@@ -1,19 +1,20 @@
 import { existsSync } from "node:fs";
+import { join } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { join, path } from "node:path";
-import { createConfigFile } from "./config/configCreator";
-import { loadConfig } from "./config/configLoader";
-import { getToken } from "./auth/auth";
-import { clearFile } from "./file/fileUtils";
-import { getColors, getJSONColors } from "./handler/colorHandler";
-import { getShadows, getJSONShadows } from "./handler/shadowHandler";
+import { getToken } from "./auth/auth.js";
+import { createConfigFile } from "./config/configCreator.js";
+import { loadConfig } from "./config/configLoader.js";
 import {
   getDefaultColorTemplatePath,
   getDefaultShadowTemplatePath,
-} from "./config/defaultTemplate";
+} from "./config/defaultTemplate.js";
+import { clearFile } from "./file/fileUtils.js";
+import { getColors, getJSONColors } from "./handler/colorHandler.js";
+import { getJSONShadows, getShadows } from "./handler/shadowHandler.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filenameURLToPath = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filenameURLToPath);
 
 async function main() {
   const configPath = join(__dirname, "config/config.json");
@@ -163,4 +164,4 @@ async function processItemJSON(item, config) {
   }
 }
 
-export default { main, getMainJSON };
+export { main, getMainJSON };

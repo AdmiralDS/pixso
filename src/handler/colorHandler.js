@@ -1,7 +1,7 @@
-import { getMapColors } from "../pixso/pixso_service";
-import { renderTemplate } from "./templateHandler";
-import { appendToFile } from "../file/fileUtils";
-import { parseRules } from "../transform/transformRules";
+import { appendToFile } from "../file/fileUtils.js";
+import { getMapColors } from "../pixso/pixso_service.js";
+import { parseRules } from "../transform/transformRules.js";
+import { renderTemplate } from "./templateHandler.js";
 
 async function getColors(
   baseURL,
@@ -54,15 +54,15 @@ async function getJSONColors(
 
     const rules = parseRules(transformRules);
     //TODO refactor to reduce
-    var transformedColors = colors.map((color) => {
+    let transformedColors = colors.map((color) => {
       let transformedColorName = color.name;
-      rules.forEach((func) => {
+      for (const func of rules) {
         transformedColorName = func(transformedColorName);
-      });
+      }
       return { name: transformedColorName, value: color.value };
-    });
+    });    
 
-    if (transformRules.sort == true) {
+    if (transformRules.sort) {
       transformedColors = transformedColors.sort((a, b) =>
         a.name.localeCompare(b.name)
       );
@@ -76,4 +76,4 @@ async function getJSONColors(
   }
 }
 
-export default { getColors, getJSONColors };
+export { getColors, getJSONColors };

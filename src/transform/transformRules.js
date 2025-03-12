@@ -60,4 +60,4 @@ function parseRules(nameTransformRules) {
     return funcs;
 }
 
-module.exports = { parseRules };
+export { parseRules };
