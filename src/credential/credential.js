@@ -1,7 +1,12 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const readline = require("node:readline");
-require("dotenv").config({ path: getEnvFilePath() });
+import fs from "node:fs";
+import path from "node:path";
+import { join } from "node:path";
+import readline from "node:readline";
+import { fileURLToPath } from "node:url";
+import dotenv from "dotenv";
+
+const __filenameURLToPath = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filenameURLToPath);
 
 async function promptUserForCredentials() {
   const rl = readline.createInterface({
@@ -26,7 +31,7 @@ async function promptUserForCredentials() {
 function loadEnv() {
   try {
     const envFilePath = getEnvFilePath();
-    require("dotenv").config({ path: envFilePath });
+    dotenv.config({ path: envFilePath });
   } catch (error) {
     console.error(
       ".env.secret file not found or an error occurred while loading environment variables."
@@ -62,7 +67,8 @@ async function getCredentials() {
 }
 
 function getEnvFilePath() {
+  console.log(path.join(__dirname, ".env.secret"));
   return path.join(__dirname, ".env.secret");
 }
 
-module.exports = { getCredentials };
+export { getCredentials };

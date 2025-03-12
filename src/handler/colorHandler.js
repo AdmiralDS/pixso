@@ -1,7 +1,7 @@
-const { getMapColors } = require("../pixso/pixso_service");
-const { renderTemplate } = require("./templateHandler");
-const { appendToFile } = require("../file/fileUtils");
-const { parseRules } = require("../transform/transformRules");
+import { appendToFile } from "../file/fileUtils.js";
+import { getMapColors } from "../pixso/pixso_service.js";
+import { parseRules } from "../transform/transformRules.js";
+import { renderTemplate } from "./templateHandler.js";
 
 async function getColors(
   baseURL,
@@ -10,7 +10,7 @@ async function getColors(
   token,
   templatePath,
   outputFilePath,
-  transformRules
+  transformRules,
 ) {
   try {
     const colors = await getMapColors(baseURL, fileKey, token);
@@ -54,15 +54,15 @@ async function getJSONColors(
 
     const rules = parseRules(transformRules);
     //TODO refactor to reduce
-    var transformedColors = colors.map((color) => {
+    let transformedColors = colors.map((color) => {
       let transformedColorName = color.name;
-      rules.forEach((func) => {
+      for (const func of rules) {
         transformedColorName = func(transformedColorName);
-      });
+      }
       return { name: transformedColorName, value: color.value };
-    });
+    });    
 
-    if (transformRules.sort == true) {
+    if (transformRules.sort) {
       transformedColors = transformedColors.sort((a, b) =>
         a.name.localeCompare(b.name)
       );
@@ -76,4 +76,4 @@ async function getJSONColors(
   }
 }
 
-module.exports = { getColors, getJSONColors };
+export { getColors, getJSONColors };

@@ -1,7 +1,7 @@
-const { getMapShadows } = require("../pixso/pixso_service");
-const { renderTemplate } = require("./templateHandler");
-const { appendToFile } = require("../file/fileUtils");
-const { parseRules } = require("../transform/transformRules");
+import { appendToFile } from "../file/fileUtils.js";
+import { getMapShadows } from "../pixso/pixso_service.js";
+import { parseRules } from "../transform/transformRules.js";
+import { renderTemplate } from "./templateHandler.js";
 
 async function getShadows(
   baseURL,
@@ -10,19 +10,20 @@ async function getShadows(
   token,
   templatePath,
   outputFilePath,
-  transformRules
+  transformRules,
 ) {
   try {
     const shadows = await getMapShadows(baseURL, fileKey, token);
 
     const rules = parseRules(transformRules);
 
-    var transformedShadows = shadows.map((shadow) => {
+    let transformedShadows = [];
+    for (const shadow of shadows) {
       let transformedShadowName = shadow.name;
-      rules.forEach((func) => {
+      for (const func of rules) {
         transformedShadowName = func(transformedShadowName);
-      });
-      return {
+      }
+      transformedShadows.push({
         name: transformedShadowName,
         values: shadow.values.map((value) => ({
           x: value.x,
@@ -35,10 +36,10 @@ async function getShadows(
           alpha: value.alpha,
           isShowInset: value.isShowInset,
         })),
-      };
-    });
+      });
+    }    
 
-    if (transformRules.sort == true) {
+    if (transformRules.sort) {
       transformedShadows = transformedShadows.sort((a, b) =>
         a.name.localeCompare(b.name)
       );
@@ -69,12 +70,13 @@ async function getJSONShadows(
 
     const rules = parseRules(transformRules);
 
-    var transformedShadows = shadows.map((shadow) => {
+    let transformedShadows = [];
+    for (const shadow of shadows) {
       let transformedShadowName = shadow.name;
-      rules.forEach((func) => {
+      for (const func of rules) {
         transformedShadowName = func(transformedShadowName);
-      });
-      return {
+      }
+      transformedShadows.push({
         name: transformedShadowName,
         values: shadow.values.map((value) => ({
           x: value.x,
@@ -87,10 +89,11 @@ async function getJSONShadows(
           alpha: value.alpha,
           isShowInset: value.isShowInset,
         })),
-      };
-    });
+      });
+    }
+    
 
-    if (transformRules.sort == true) {
+    if (transformRules.sort) {
       transformedShadows = transformedShadows.sort((a, b) =>
         a.name.localeCompare(b.name)
       );
@@ -104,4 +107,4 @@ async function getJSONShadows(
   }
 }
 
-module.exports = { getShadows, getJSONShadows };
+export { getShadows, getJSONShadows };

@@ -1,15 +1,21 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const readline = require("node:readline");
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
+import path from "node:path";
+import process from "node:process";
+import { createInterface } from "node:readline";
+import { fileURLToPath } from "node:url";
 
-const rl = readline.createInterface({
+const __filenameURLToPath = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filenameURLToPath);
+
+const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
 async function askQuestion(query) {
   return new Promise((resolve) =>
-    rl.question(query, (answer) => resolve(answer.trim()))
+    rl.question(query, (answer) => resolve(answer.trim())),
   );
 }
 
@@ -50,7 +56,7 @@ async function createConfigFile() {
       }
     }
     const outputFilePath = await askQuestion(
-      "Enter the output file path with file extention, like color.dark.ts or color.dark.swift: "
+      "Enter the output file path with file extention, like color.dark.ts or color.dark.swift: ",
     );
     const items = [];
 
@@ -61,18 +67,18 @@ async function createConfigFile() {
       const type = await askQuestion("Enter item type (COLOR or SHADOW): ");
       const name = await askQuestion("Enter name (e.g., color or boxShadow): ");
       const apiBaseUrl = await askQuestion(
-        "Enter API URL (e.g., https://pixso.t1-pixso.ru): "
+        "Enter API URL (e.g., https://pixso.t1-pixso.ru): ",
       );
       const fileKey = await askQuestion("Enter fileKey: ");
       const templatePath = await askQuestion(
-        "Enter template path (leave empty if not needed): "
+        "Enter template path (leave empty if not needed): ",
       );
 
       const removePercent = await askQuestion(
-        "Remove percentage from names? (true/false): "
+        "Remove percentage from names? (true/false): ",
       );
       const keepOnlyFirstUnderscore = await askQuestion(
-        "Keep only the first underscore? (true/false): "
+        "Keep only the first underscore? (true/false): ",
       );
       const sort = await askQuestion("Sort items? (true/false): ");
 
@@ -143,11 +149,11 @@ async function createConfigFile() {
     addMoreTheme = addAnotherTheme.toLowerCase() === "yes";
   }
 
-  const configPath = path.join(__dirname, "config.json");
-  fs.writeFileSync(configPath, JSON.stringify(themes, null, 2), "utf8");
+  const configPath = join(__dirname, "config.json");
+  writeFileSync(configPath, JSON.stringify(themes, null, 2), "utf8");
 
   console.log(`\n✅ Configuration file successfully created: ${configPath}`);
   rl.close();
 }
 
-module.exports = { createConfigFile };
+export { createConfigFile };

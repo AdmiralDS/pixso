@@ -1,4 +1,4 @@
-const https = require("node:https");
+import { get } from "node:https";
 
 function fetchJSON(url, token) {
   return new Promise((resolve, reject) => {
@@ -8,28 +8,26 @@ function fetchJSON(url, token) {
       },
     };
 
-    https
-      .get(url, options, (res) => {
-        let data = "";
-        res.on("data", (chunk) => {
-          data += chunk;
-        });
-        res.on("end", () => {
-          if (res.statusCode !== 200) {
-            return reject(
-              new Error(`Request failed with status: ${res.statusCode}`)
-            );
-          }
-          try {
-            resolve(JSON.parse(data));
-          } catch (err) {
-            reject(new Error(`Failed to parse JSON: ${err.message}`));
-          }
-        });
-      })
-      .on("error", (err) => {
-        reject(new Error(`HTTP request error: ${err.message}`));
+    get(url, options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
       });
+      res.on("end", () => {
+        if (res.statusCode !== 200) {
+          return reject(
+            new Error(`Request failed with status: ${res.statusCode}`),
+          );
+        }
+        try {
+          resolve(JSON.parse(data));
+        } catch (err) {
+          reject(new Error(`Failed to parse JSON: ${err.message}`));
+        }
+      });
+    }).on("error", (err) => {
+      reject(new Error(`HTTP request error: ${err.message}`));
+    });
   });
 }
 
@@ -47,7 +45,7 @@ function toHexColor(color) {
   const g = Math.round(color.g);
   const b = Math.round(color.b);
 
-  let colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b)
+  const colorString = `#${((1 << 24) + (r << 16) + (g << 8) + b)
     .toString(16)
     .slice(1)
     .toUpperCase()}`;
@@ -146,4 +144,4 @@ async function getMapShadows(apiBase, fileKey, token) {
   return shadows;
 }
 
-module.exports = { getMapColors, getMapShadows };
+export { getMapColors, getMapShadows };

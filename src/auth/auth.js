@@ -1,11 +1,13 @@
-const { getCredentials } = require("../credential/credential");
-const https = require("node:https");
-const querystring = require("node:querystring");
+import { getCredentials } from "../credential/credential.js";
+import { request } from "node:https";
+import { stringify } from "node:querystring";
+import { URL } from "node:url";
+import { Buffer } from "node:buffer";
 
 async function getToken(baseURL) {
   const { clientID, clientSecret } = await getCredentials();
 
-  const data = querystring.stringify({
+  const data = stringify({
     grant_type: "client_credentials",
     scope: "all_scopes",
     client_id: clientID,
@@ -24,7 +26,7 @@ async function getToken(baseURL) {
   };
 
   return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
+    const req = request(options, (res) => {
       let responseBody = "";
 
       res.on("data", (chunk) => {
@@ -54,4 +56,4 @@ async function getToken(baseURL) {
   });
 }
 
-module.exports = { getToken };
+export { getToken };

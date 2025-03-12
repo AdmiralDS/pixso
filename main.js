@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-const yargs = require("yargs");
-const { hideBin } = require("yargs/helpers");
-const path = require("node:path");
-const { main, getMainJSON } = require("./src/mainLogic");
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import { main, getMainJSON } from "./src/mainLogic.js"; 
 
 const argv = yargs(hideBin(process.argv))
   .command(

@@ -1,20 +1,25 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { createConfigFile } = require("./config/configCreator");
-const { loadConfig } = require("./config/configLoader");
-const { getToken } = require("./auth/auth");
-const { clearFile } = require("./file/fileUtils");
-const { getColors, getJSONColors } = require("./handler/colorHandler");
-const { getShadows, getJSONShadows } = require("./handler/shadowHandler");
-const {
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { getToken } from "./auth/auth.js";
+import { createConfigFile } from "./config/configCreator.js";
+import { loadConfig } from "./config/configLoader.js";
+import {
   getDefaultColorTemplatePath,
   getDefaultShadowTemplatePath,
-} = require("./config/defaultTemplate");
+} from "./config/defaultTemplate.js";
+import { clearFile } from "./file/fileUtils.js";
+import { getColors, getJSONColors } from "./handler/colorHandler.js";
+import { getJSONShadows, getShadows } from "./handler/shadowHandler.js";
+
+const __filenameURLToPath = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filenameURLToPath);
 
 async function main() {
-  const configPath = path.join(__dirname, "config/config.json");
+  const configPath = join(__dirname, "config/config.json");
 
-  if (!fs.existsSync(configPath)) {
+  if (!existsSync(configPath)) {
     console.log("The config file.json was not found. Starting the setup...");
     await createConfigFile();
   }
@@ -39,9 +44,9 @@ async function main() {
 }
 
 async function getMainJSON() {
-  const configPath = path.join(__dirname, "config/config.json");
+  const configPath = join(__dirname, "config/config.json");
 
-  if (!fs.existsSync(configPath)) {
+  if (!existsSync(configPath)) {
     console.log("The config file.json was not found. Starting the setup...");
     await createConfigFile();
   }
@@ -95,7 +100,7 @@ async function processItem(item, config) {
       token,
       templateColorPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   } else if (type === "SHADOW") {
     await getShadows(
@@ -105,7 +110,7 @@ async function processItem(item, config) {
       token,
       templateShadowPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   }
 }
@@ -142,7 +147,7 @@ async function processItemJSON(item, config) {
       token,
       templateColorPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   }
 
@@ -154,9 +159,9 @@ async function processItemJSON(item, config) {
       token,
       templateShadowPath,
       config.outputFilePath,
-      item.transformRules
+      item.transformRules,
     );
   }
 }
 
-module.exports = { main, getMainJSON };
+export { main, getMainJSON };
