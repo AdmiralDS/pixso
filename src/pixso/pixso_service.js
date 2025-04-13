@@ -146,4 +146,44 @@ async function getMapShadows(apiBase, fileKey, token) {
   return shadows;
 }
 
-module.exports = { getMapColors, getMapShadows };
+async function getMapImages(apiBase, fileKey, token) {
+  if (!fileKey) {
+    throw new Error("fileKey cannot be empty");
+  }
+
+  console.log("getMapImages");
+
+  const apiUrl = `${apiBase}/openapi/v1/file/library?file_key=${fileKey}`;
+  console.log(apiUrl);
+  const apiResponse = await fetchJSON(apiUrl, token);
+
+  const components = apiResponse.data.components;
+  const result = [];
+
+  for (const componentId in components) {
+    const component = components[componentId];
+    const componentName = component.name;
+    const thumbnailUrl = component.thumbnail_url;
+
+    if (!thumbnailUrl) continue;
+
+    const id = extractComponentIdFromUrl(thumbnailUrl);
+    if (!id) continue;
+
+    const finalUrl = `https://pixso.t1-pixso.ru/api/pix/component/${id}/thumb`;
+
+    result.push({
+      name: componentName,
+      url: finalUrl,
+    });
+  }
+
+  return result;
+}
+
+function extractComponentIdFromUrl(thumbnailUrl) {
+  const match = thumbnailUrl.match(/\/component\/([^/]+)\/thumb/);
+  return match ? match[1] : null;
+}
+
+module.exports = { getMapColors, getMapShadows, getMapImages };

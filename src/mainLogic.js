@@ -6,6 +6,7 @@ const { getToken } = require("./auth/auth");
 const { clearFile } = require("./file/fileUtils");
 const { getColors, getJSONColors } = require("./handler/colorHandler");
 const { getShadows, getJSONShadows } = require("./handler/shadowHandler");
+const { getImages } = require("./handler/imageHandler");
 const {
   getDefaultColorTemplatePath,
   getDefaultShadowTemplatePath,
@@ -32,6 +33,29 @@ async function main() {
 
     clearFile(config.outputFilePath);
 
+    for (const item of config.items || []) {
+      await processItem(item, config);
+    }
+  }
+}
+
+async function getMainImages() {
+  const configPath = path.join(__dirname, "config/config.json");
+
+  if (!fs.existsSync(configPath)) {
+    console.log("The config file.json was not found. Starting the setup...");
+    await createConfigFile();
+  }
+
+  let configs;
+  try {
+    configs = await loadConfig(configPath);
+  } catch (err) {
+    console.error("Error reading or parsing the configuration file:", err);
+    return;
+  }
+
+  for (const config of configs) {
     for (const item of config.items || []) {
       await processItem(item, config);
     }
@@ -80,34 +104,52 @@ async function processItem(item, config) {
     return;
   }
 
+  console.log("START TOKEN");
   let token = "";
   try {
     token = await getToken(baseURL);
   } catch (err) {
     console.error("Can not get token:", err.message);
   }
+  console.log(token)
+  switch (type) {
+    case "COLOR":
+      await getColors(
+        baseURL,
+        fileKey,
+        name,
+        token,
+        templateColorPath,
+        config.outputFilePath,
+        item.transformRules
+      );
+      break;
+  
+    case "SHADOW":
+      await getShadows(
+        baseURL,
+        fileKey,
+        name,
+        token,
+        templateShadowPath,
+        config.outputFilePath,
+        item.transformRules
+      );
+      break;
 
-  if (type === "COLOR") {
-    await getColors(
-      baseURL,
-      fileKey,
-      name,
-      token,
-      templateColorPath,
-      config.outputFilePath,
-      item.transformRules
-    );
-  } else if (type === "SHADOW") {
-    await getShadows(
-      baseURL,
-      fileKey,
-      name,
-      token,
-      templateShadowPath,
-      config.outputFilePath,
-      item.transformRules
-    );
+    case "IMAGE":
+      await getImages(
+        baseURL,
+        fileKey,
+        token,
+      );
+      break;
+
+    default:
+      console.warn(`Unknown type: ${type}`);
+      break;
   }
+
 }
 
 async function processItemJSON(item, config) {
@@ -159,4 +201,4 @@ async function processItemJSON(item, config) {
   }
 }
 
-module.exports = { main, getMainJSON };
+module.exports = { main, getMainJSON, getMainImages };
