@@ -3,7 +3,7 @@
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const path = require("node:path");
-const { main, getMainJSON } = require("./src/mainLogic");
+const { main, getMainImages, getMainJSON } = require("./src/mainLogic");
 
 const argv = yargs(hideBin(process.argv))
   .command(
@@ -14,6 +14,21 @@ const argv = yargs(hideBin(process.argv))
       try {
         await main();
         console.log("✅ Success update.");
+      } catch (error) {
+        console.error("❌ Error command:", error.message);
+        process.exit(1);
+      }
+      process.exit(0);
+    }
+  )
+  .command(
+    "images",
+    "Run the script with an existing configuration",
+    {},
+    async () => {
+      try {
+        await getMainImages();
+        console.log("✅ Success get images.");
       } catch (error) {
         console.error("❌ Error command:", error.message);
         process.exit(1);
